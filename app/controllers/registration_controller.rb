@@ -1,12 +1,10 @@
-require 'jwt'
-
 class RegistrationController < ApplicationController
   def create
     @user = User.new(user_params)
   
     if @user.save
-      token = generate_jwt(@user) # On génére le JWT
-      @user.update(jwt: token) # On met à jour l'utilisateur avec le JWT
+      payload = { user_id: @user.id, exp: 24.hours.from_now.to_i }
+      token = Authentication::JwtService.encode(payload)
       render json: { message: 'User created successfully', user: @user, token: token }, status: :created
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
@@ -14,13 +12,6 @@ class RegistrationController < ApplicationController
   end
   
   private
-
-  def generate_jwt(user)
-    payload = { user_id: user.id }
-    secret = Rails.application.secrets.secret_key_base
-    token = JWT.encode(payload, secret)
-    token
-  end
   
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation)
