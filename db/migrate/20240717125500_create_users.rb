@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration[6.1]
         t.string :id, primary_key: true, null: false, default: -> { 'uuid()' }
         t.string :email, null: false, index: { unique: true }
         t.string :password_digest, null: false
-  
+          
         t.timestamps
       end
     end

@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_17_125500) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_18_115500) do
   create_table "users", id: :string, default: -> { "uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "jwt"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
